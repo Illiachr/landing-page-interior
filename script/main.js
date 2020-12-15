@@ -1,6 +1,7 @@
 window.addEventListener('DOMContentLoaded', () => {
 	'use strict';
 
+	//SECTION TIMER
 	const countTimer = (
 		deadline = '1 january 2021', hoursSelector = '#timer-hours',
 		minSelector = '#timer-minutes', secSelector = '#timer-seconds'
@@ -38,4 +39,42 @@ window.addEventListener('DOMContentLoaded', () => {
 	};
 
 	countTimer();
+
+	//!SECTION
+	//SECTION MENU
+
+	const toggleMenu = () => {
+		const menuBtn = document.querySelector('.menu'),
+			closeMenuBtn = document.querySelector('.close-btn'),
+			menu = document.querySelector('menu'),
+			menuItems = document.querySelectorAll('ul>li');
+
+		const handlerAnimate = () => {
+			if (!menu.style.transform || menu.style.transform === `translateX(-100%)`) {
+				menu.style.transform = `translateX(100%)`;
+				menuBtn.style.display = `none`;
+			} else {
+				menu.style.transform = `translateX(-100%)`;
+				menuBtn.style.display = `block`;
+			}
+		};
+
+		const handlerToggle = () => {
+			menu.classList.toggle('active-menu');
+		};
+
+		menuBtn.addEventListener('click', handlerToggle);
+		closeMenuBtn.addEventListener('click', handlerToggle);
+		menuItems.forEach(item => item.addEventListener('click', handlerToggle));
+
+	};
+
+	toggleMenu();
+
+
+	//!SECTION
+	//SECTION POPUP
+
+//!SECTION
 });
+
