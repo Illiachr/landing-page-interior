@@ -50,20 +50,35 @@ window.addEventListener('DOMContentLoaded', () => {
 			menuItems = document.querySelectorAll('ul>li');
 
 		const handlerAnimate = () => {
-			if (!menu.style.transform || menu.style.transform === `translateX(-100%)`) {
-				menu.style.transform = `translateX(100%)`;
-				menuBtn.style.display = `none`;
-			} else {
-				menu.style.transform = `translateX(-100%)`;
-				menuBtn.style.display = `block`;
-			}
+			let progress = -100; // Анимация с помощью изменние свойства translateX от -100% до 100%
+			const step = () => {
+				menu.style.transform = 'translateX(' + progress + '%)';
+				progress += 1.5;
+				if (progress < 100) {
+					requestAnimationFrame(step);
+				} else {
+					menu.classList.add('active-menu');
+					menu.style.transform = '';
+					menuBtn.style.display = 'none';
+				}
+			};
+			if (menu.classList.contains('active-menu')) { menu.classList.remove('active-menu'); }
+			requestAnimationFrame(step);
 		};
 
 		const handlerToggle = () => {
 			menu.classList.toggle('active-menu');
+			if (!menu.classList.contains('active-menu')) {
+				menuBtn.style.display = 'block';
+			} else { menuBtn.style.display = 'none'; }
 		};
 
-		menuBtn.addEventListener('click', handlerToggle);
+		menuBtn.addEventListener('click', () => {
+			if (screen.width > 770) {
+				handlerAnimate();
+			} else { handlerToggle(); }
+
+		});
 		closeMenuBtn.addEventListener('click', handlerToggle);
 		menuItems.forEach(item => item.addEventListener('click', handlerToggle));
 
@@ -74,7 +89,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	//!SECTION
 	//SECTION POPUP
+	const showPopUp = () => {
+		const popUp = document.querySelector('.popup'),
+			popUpCloseBtn = document.querySelector('.popup-close'),
+			popUpBtnAll = document.querySelectorAll('.popup-btn');
 
+		popUpBtnAll.forEach(item => item.addEventListener('click', () => popUp.style.display = 'block'));
+		popUpCloseBtn.addEventListener('click', () => popUp.style.display = 'none');
+	};
+
+	showPopUp();
 //!SECTION
 });
-
