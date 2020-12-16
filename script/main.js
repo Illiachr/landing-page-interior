@@ -72,7 +72,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		};
 		let id = 0;
 		const smoothScroll = (elem, duration) => {
-			const target = document.querySelector(elem),
+			const target = document.querySelector(`#${elem.href.split('#')[1]}`),
 				targetPosition = target.getBoundingClientRect().top,
 				startPosition = window.pageYOffset,
 				distance = targetPosition - startPosition;
@@ -116,7 +116,8 @@ window.addEventListener('DOMContentLoaded', () => {
 				} else { handlerToggle(); }
 			}
 
-			if (target.closest('main a')) { smoothScroll('.service', 1500); }
+			if (target.closest('main a')) { smoothScroll(target.closest('main a'), 2000); }
+			if (target.closest('menu li')) { smoothScroll(target.closest('menu li a'), 2000); }
 		});
 	};
 
