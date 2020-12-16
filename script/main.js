@@ -70,22 +70,53 @@ window.addEventListener('DOMContentLoaded', () => {
 				menuBtn.style.display = 'block';
 			} else { menuBtn.style.display = 'none'; }
 		};
+		let id = 0;
+		const smoothScroll = (elem, duration) => {
+			const target = document.querySelector(elem),
+				targetPosition = target.getBoundingClientRect().top,
+				startPosition = window.pageYOffset,
+				distance = targetPosition - startPosition;
+			let startTime = null,
+				currentTime = Date.now();
+		
+			const ease = (t, b, c, d) => {
+				t /= d / 2;
+				if (t < 1) { return c / 2 * t * t + b; }
+				t--;
+				return -c / 2 * (t * (t - 2) - 1) + b;
+			};
+			
+			const animation = (currentTime) => {
+				if (startTime === null) { startTime = currentTime; }
+				let timeElapsed = currentTime - startTime,
+				run = ease(timeElapsed, startPosition, distance, duration);
+				scrollTo(0, run);
+		
+				if (timeElapsed < duration) { 
+					id = requestAnimationFrame(animation); 
+				} else { cancelAnimationFrame(id); }		
+			};
+
+			if (window.pageYOffset === 0){
+			id = requestAnimationFrame(animation);
+			}
+		};
 
 		document.addEventListener('click', event => {
 			let target = event.target;
-			target = target.closest('.menu');
-			if (target) {
+			if (target.classList.contains('close-btn')) { 
+				handlerToggle(); 
+			} 
+
+			if (menu.classList.contains('active-menu') && !target.classList.contains('active-menu')) {handlerToggle();}
+
+			if (target.closest('.menu')) {
 				if (screen.width > 768) {
 					handlerAnimate();
 				} else { handlerToggle(); }
-
 			}
 
-			target = event.target;
-			target = target.closest('active-menu');
-			if (!target) {
-				handlerToggle();
-			}
+			if (target.closest('main a')) { smoothScroll('.service', 1500); }
 		});
 	};
 
