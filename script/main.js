@@ -45,15 +45,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	const toggleMenu = () => {
 		const menuBtn = document.querySelector('.menu'),
-			closeMenuBtn = document.querySelector('.close-btn'),
-			menu = document.querySelector('menu'),
-			menuItems = document.querySelectorAll('ul>li');
+			menu = document.querySelector('menu');
 
 		const handlerAnimate = () => {
 			let progress = -100; // Анимация с помощью изменние свойства translateX от -100% до 100%
 			const step = () => {
 				menu.style.transform = 'translateX(' + progress + '%)';
-				progress += 1.5;
+				progress += 2.7;
 				if (progress < 100) {
 					requestAnimationFrame(step);
 				} else {
@@ -73,15 +71,19 @@ window.addEventListener('DOMContentLoaded', () => {
 			} else { menuBtn.style.display = 'none'; }
 		};
 
-		menuBtn.addEventListener('click', () => {
-			if (screen.width > 770) {
-				handlerAnimate();
-			} else { handlerToggle(); }
+		document.addEventListener('click', event => {
+			let target = event.target;
+			target = target.closest('.menu');
+			if (target) {
+				if (screen.width > 770) {
+					handlerAnimate();
+				} else { handlerToggle(); }
+
+			}
+
+			handlerToggle();
 
 		});
-		closeMenuBtn.addEventListener('click', handlerToggle);
-		menuItems.forEach(item => item.addEventListener('click', handlerToggle));
-
 	};
 
 	toggleMenu();
@@ -91,13 +93,60 @@ window.addEventListener('DOMContentLoaded', () => {
 	//SECTION POPUP
 	const showPopUp = () => {
 		const popUp = document.querySelector('.popup'),
-			popUpCloseBtn = document.querySelector('.popup-close'),
 			popUpBtnAll = document.querySelectorAll('.popup-btn');
 
 		popUpBtnAll.forEach(item => item.addEventListener('click', () => popUp.style.display = 'block'));
-		popUpCloseBtn.addEventListener('click', () => popUp.style.display = 'none');
+		popUp.addEventListener('click', event => {
+			let target = event.target;
+
+			if (target.classList.contains('popup-close')) {
+				popUp.style.display = 'none';
+			}
+
+			target = target.closest('.popup-content');
+
+			if (!target) {
+				popUp.style.display = 'none';
+			}
+		});
 	};
 
 	showPopUp();
-//!SECTION
+	//!SECTION
+
+	//SECTION POPUP
+
+	const toggleTab = () => {
+		const tabHeader = document.querySelector('.service-header'),
+			tab = document.querySelectorAll('.service-header-tab'),
+			tabContent = document.querySelectorAll('.service-tab');
+
+		const toggleTab = index => {
+			for (let i = 0; i < tabContent.length; i++) {
+				if (index === i) {
+					tab[i].classList.add('active');
+					tabContent[i].classList.remove('d-none');
+				} else {
+					tab[i].classList.remove('active');
+					tabContent[i].classList.add('d-none');
+				}
+			}
+		};
+
+		tabHeader.addEventListener('click', event => {
+			let target = event.target;
+			target = target.closest('.service-header-tab');
+			if (target) {
+				tab.forEach((item, index) => {
+					if (item === target) {
+						toggleTab(index);
+					}
+				});
+			}
+		});
+	};
+
+	toggleTab();
+
+	//!SECTION
 });
