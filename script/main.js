@@ -75,14 +75,17 @@ window.addEventListener('DOMContentLoaded', () => {
 			let target = event.target;
 			target = target.closest('.menu');
 			if (target) {
-				if (screen.width > 770) {
+				if (screen.width > 768) {
 					handlerAnimate();
 				} else { handlerToggle(); }
 
 			}
 
-			handlerToggle();
-
+			target = event.target;
+			target = target.closest('active-menu');
+			if (!target) {
+				handlerToggle();
+			}
 		});
 	};
 
