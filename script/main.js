@@ -78,37 +78,39 @@ window.addEventListener('DOMContentLoaded', () => {
 				distance = targetPosition - startPosition;
 			let startTime = null,
 				currentTime = Date.now();
-		
+
 			const ease = (t, b, c, d) => {
 				t /= d / 2;
 				if (t < 1) { return c / 2 * t * t + b; }
 				t--;
 				return -c / 2 * (t * (t - 2) - 1) + b;
 			};
-			
-			const animation = (currentTime) => {
+
+			const animation = currentTime => {
 				if (startTime === null) { startTime = currentTime; }
-				let timeElapsed = currentTime - startTime,
-				run = ease(timeElapsed, startPosition, distance, duration);
+				const timeElapsed = currentTime - startTime,
+					run = ease(timeElapsed, startPosition, distance, duration);
 				scrollTo(0, run);
-		
-				if (timeElapsed < duration) { 
-					id = requestAnimationFrame(animation); 
-				} else { cancelAnimationFrame(id); }		
+
+				if (timeElapsed < duration) {
+					id = requestAnimationFrame(animation);
+				} else { cancelAnimationFrame(id); }
 			};
 
-			if (window.pageYOffset === 0){
-			id = requestAnimationFrame(animation);
+			if (window.pageYOffset === 0) {
+				id = requestAnimationFrame(animation);
 			}
 		};
 
 		document.addEventListener('click', event => {
-			let target = event.target;
-			if (target.classList.contains('close-btn')) { 
-				handlerToggle(); 
-			} 
+			const target = event.target;
+			if (target.classList.contains('close-btn')) {
+				handlerToggle();
+			}
 
-			if (menu.classList.contains('active-menu') && !target.classList.contains('active-menu')) {handlerToggle();}
+			if (menu.classList.contains('active-menu') && !target.classList.contains('active-menu')) {
+				handlerToggle();
+			}
 
 			if (target.closest('.menu')) {
 				if (screen.width > 768) {
@@ -116,7 +118,7 @@ window.addEventListener('DOMContentLoaded', () => {
 				} else { handlerToggle(); }
 			}
 
-			if (target.closest('main a')) { smoothScroll(target.closest('main a'), 2000); }
+			if (target.closest('main a')) { document.querySelector('.service').scrollIntoView({block: "center", behavior: "auto"}); }
 			if (target.closest('menu li')) { smoothScroll(target.closest('menu li a'), 2000); }
 		});
 	};
@@ -149,7 +151,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	showPopUp();
 	//!SECTION
 
-	//SECTION POPUP
+	//SECTION TAB
 
 	const toggleTab = () => {
 		const tabHeader = document.querySelector('.service-header'),
@@ -183,5 +185,91 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	toggleTab();
 
+	//!SECTION
+
+	//SECTION SLIDER
+
+	const slider = () => {
+		const slide = document.querySelectorAll('.portfolio-item'),
+			btn = document.querySelectorAll('.portfolio-btn'),
+			dot = document.querySelectorAll('.dot'),
+			slider = document.querySelector('.portfolio-content');
+
+		let currentSlide = 0,
+			interval  = 0;
+
+		const createElem = (strClass, strSelectorAppend, strTag = 'li') => {
+			const elem = document.createElem(strTag),
+				elemAppend = document.querySelector(strSelectorAppend);
+			elem.classList.add(strClass);
+			elemAppend.append(elem);
+			return elem;
+		};
+
+		const rmClass = (elem, index, strClass) => {
+			elem[index].classList.remove(strClass);
+		};
+
+		const addClass = (elem, index, strClass) => {
+			elem[index].classList.add(strClass);
+		};
+
+		const autoSwipe = () => {
+			rmClass(slide, currentSlide, 'portfolio-item-active');
+			rmClass(dot, currentSlide, 'dot-active');
+
+			currentSlide++;
+
+			if (currentSlide >= slide.length) { currentSlide = 0; }
+
+			addClass(slide, currentSlide, 'portfolio-item-active');
+			addClass(dot, currentSlide, 'dot-active');
+		};
+
+		const startSwipe = (time = 2000) => {
+			interval = setInterval(autoSwipe, time);
+		};
+
+		const stopSwipe = () => {
+			clearInterval(interval);
+		};
+
+		slider.addEventListener('click', event => {
+			event.preventDefault();
+			const target = event.target;
+
+			if (!target.matches('.portfolio-btn') && !target.matches('.dot')) { return; }
+
+			rmClass(slide, currentSlide, 'portfolio-item-active');
+			rmClass(dot, currentSlide, 'dot-active');
+			if (target.matches('#arrow-right')) {
+				currentSlide++;
+			} else if (target.matches('#arrow-left')) {
+				currentSlide--;
+			} else if (target.matches('.dot')) {
+				dot.forEach((item, index) => {
+					if (item === target) { currentSlide = index; }
+				});
+			}
+
+			if (currentSlide >= slide.length) { currentSlide = 0; }
+			if (currentSlide < 0) { currentSlide = slide.length - 1; }
+
+			addClass(slide, currentSlide, 'portfolio-item-active');
+			addClass(dot, currentSlide, 'dot-active');
+		});
+
+		slider.addEventListener('mouseover', event => {
+			if (event.target.matches('.portfolio-btn') || event.target.matches('.dot')) { stopSwipe();}
+		});
+
+		slider.addEventListener('mouseout', event => {
+			if (event.target.matches('.portfolio-btn') || event.target.matches('.dot')) { startSwipe();}
+		});
+
+		startSwipe(1500);
+	};
+
+	slider();
 	//!SECTION
 });
