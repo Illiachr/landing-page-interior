@@ -1,7 +1,19 @@
 window.addEventListener('DOMContentLoaded', () => {
 	'use strict';
+	// SECTION Libruary
 
-	//SECTION TIMER
+	const addElem = (strClass, strSelectorAppend, strTag) => {
+		const elem = document.createElement(strTag),
+			elemAppend = document.querySelector(strSelectorAppend);
+		elem.classList.add(strClass);
+		elemAppend.append(elem);
+		return elem;
+	};
+
+	// !SECTION
+
+	// SECTION Timer
+
 	const countTimer = (
 		deadline = '1 january 2021', hoursSelector = '#timer-hours',
 		minSelector = '#timer-minutes', secSelector = '#timer-seconds'
@@ -40,8 +52,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	countTimer();
 
-	//!SECTION
-	//SECTION MENU
+	// !SECTION
+
+	// SECTION Menu
 
 	const toggleMenu = () => {
 		const menuBtn = document.querySelector('.menu'),
@@ -75,10 +88,9 @@ window.addEventListener('DOMContentLoaded', () => {
 			const target = document.querySelector(`#${elem.href.split('#')[1]}`),
 				targetPosition = target.getBoundingClientRect().top,
 				startPosition = window.pageYOffset,
-				distance = targetPosition - startPosition;
-			let startTime = null,
+				distance = targetPosition - startPosition,
 				currentTime = Date.now();
-
+			let startTime = null;
 			const ease = (t, b, c, d) => {
 				t /= d / 2;
 				if (t < 1) { return c / 2 * t * t + b; }
@@ -117,8 +129,11 @@ window.addEventListener('DOMContentLoaded', () => {
 					handlerAnimate();
 				} else { handlerToggle(); }
 			}
-
-			if (target.closest('main a')) { document.querySelector('.service').scrollIntoView({block: "center", behavior: "auto"}); }
+			//TODO сделать плавный скролл по кнопке
+			if (target.closest('main a')) {
+				document.querySelector('.service').
+					scrollIntoView({ block: "center", behavior: "auto" });
+			}
 			if (target.closest('menu li')) { smoothScroll(target.closest('menu li a'), 2000); }
 		});
 	};
@@ -126,8 +141,9 @@ window.addEventListener('DOMContentLoaded', () => {
 	toggleMenu();
 
 
-	//!SECTION
-	//SECTION POPUP
+	// !SECTION
+
+	// SECTION Popup
 	const showPopUp = () => {
 		const popUp = document.querySelector('.popup'),
 			popUpBtnAll = document.querySelectorAll('.popup-btn');
@@ -149,9 +165,10 @@ window.addEventListener('DOMContentLoaded', () => {
 	};
 
 	showPopUp();
+
 	//!SECTION
 
-	//SECTION TAB
+	//SECTION Tab navigation
 
 	const toggleTab = () => {
 		const tabHeader = document.querySelector('.service-header'),
@@ -190,21 +207,25 @@ window.addEventListener('DOMContentLoaded', () => {
 	//SECTION SLIDER
 
 	const slider = () => {
+
+		const addDots = (sliderSelector, sliderItemSelector, dotClass, dotListClass, dotElem = 'li') => {
+			const sliderNode = document.querySelectorAll(sliderItemSelector); // получаем все элементы слайдера
+			addElem(dotListClass, sliderSelector, 'ul'); // создаем список
+			for (let i = 0; i < sliderNode.length; i++) { // добавляем точки
+				addElem(dotClass, `.${dotListClass}`, dotElem); //! ВАЖНО второй параметр должен быть селектором
+			}
+			const elemNode = document.querySelectorAll(`.${dotClass}`);
+			elemNode[0].classList.add(`${dotClass}-active`);
+			return elemNode;
+		};
+
 		const slide = document.querySelectorAll('.portfolio-item'),
-			btn = document.querySelectorAll('.portfolio-btn'),
-			dot = document.querySelectorAll('.dot'),
-			slider = document.querySelector('.portfolio-content');
+			slider = document.querySelector('.portfolio-content'),
+			dot = addDots('.portfolio-content', '.portfolio-item', 'dot', 'portfolio-dots');
 
 		let currentSlide = 0,
 			interval  = 0;
 
-		const createElem = (strClass, strSelectorAppend, strTag = 'li') => {
-			const elem = document.createElem(strTag),
-				elemAppend = document.querySelector(strSelectorAppend);
-			elem.classList.add(strClass);
-			elemAppend.append(elem);
-			return elem;
-		};
 
 		const rmClass = (elem, index, strClass) => {
 			elem[index].classList.remove(strClass);
@@ -260,11 +281,11 @@ window.addEventListener('DOMContentLoaded', () => {
 		});
 
 		slider.addEventListener('mouseover', event => {
-			if (event.target.matches('.portfolio-btn') || event.target.matches('.dot')) { stopSwipe();}
+			if (event.target.matches('.portfolio-btn') || event.target.matches('.dot')) { stopSwipe(); }
 		});
 
 		slider.addEventListener('mouseout', event => {
-			if (event.target.matches('.portfolio-btn') || event.target.matches('.dot')) { startSwipe();}
+			if (event.target.matches('.portfolio-btn') || event.target.matches('.dot')) { startSwipe(); }
 		});
 
 		startSwipe(1500);
