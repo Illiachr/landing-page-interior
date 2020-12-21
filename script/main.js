@@ -89,6 +89,7 @@ window.addEventListener('DOMContentLoaded', () => {
 				targetPosition = target.getBoundingClientRect().top,
 				startPosition = window.pageYOffset,
 				distance = targetPosition - startPosition,
+				// eslint-disable-next-line no-unused-vars
 				currentTime = Date.now();
 			let startTime = null;
 			const ease = (t, b, c, d) => {
@@ -292,5 +293,48 @@ window.addEventListener('DOMContentLoaded', () => {
 	};
 
 	slider();
-	//!SECTION
-});
+
+	//!SECTION slider
+
+	//SECTION command
+
+	const commandToggle = () => {
+		const commandContent = document.getElementById('command');
+		let targetSrc;
+
+		commandContent.addEventListener('mouseover', e => {
+			console.log(e.target);
+			if (e.target.matches('.command__photo')) {
+				targetSrc = e.target.src;
+				e.target.src = e.target.dataset.img;
+			}
+		});
+
+		commandContent.addEventListener('mouseout', e => {
+			console.log(e.target);
+			if (e.target.matches('.command__photo')) {
+				e.target.src = targetSrc;
+			}
+		});
+	};
+
+	commandToggle();
+
+	//!SECTION command
+
+	//SECTION calculator
+
+	const calcValidation = () => {
+		const calcBlock = document.querySelector('.calc-block');
+		calcBlock.addEventListener('input', e => {
+			if (e.target.matches('.calc-block input[type=text]')) {
+				e.target.value = e.target.value.replace(/\D/, '');
+			}
+		});
+	}; //end calcValidation
+
+	calcValidation();
+
+	//!SECTION calculator
+
+}); //end window DOMLoaded
