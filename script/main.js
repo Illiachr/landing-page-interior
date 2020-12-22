@@ -336,6 +336,28 @@ window.addEventListener('DOMContentLoaded', () => {
 		});
 	}; //end calcValidation
 
+	const runNum = (num, elem) => {
+		const step = Math.round((num / 10) / 2);
+		let i = 0,
+			id;
+
+		elem.textContent = 0;
+
+		const counter = () => {
+			if (i <= num) {
+				elem.textContent = i;
+				id = requestAnimationFrame(counter);
+				i += step;
+			} else {
+				elem.textContent = num;
+				cancelAnimationFrame(id);
+			}
+		};
+
+		id = requestAnimationFrame(counter);
+	};
+
+
 	const calc = (price = 100) => {
 		const calcBlock = document.querySelector('.calc-block'),
 			calcType = document.querySelector('.calc-type'),
@@ -365,7 +387,9 @@ window.addEventListener('DOMContentLoaded', () => {
 				total = Math.ceil(price * typeValue * squareValue * countValue * dayValue);
 			}
 
-			totalValue.textContent = total;
+			if (total > 0) {
+				runNum(total, totalValue);
+			} else { totalValue.textContent = total; }
 		};
 
 		calcBlock.addEventListener('change', e => {
