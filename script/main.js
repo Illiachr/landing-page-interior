@@ -62,6 +62,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 		const handlerAnimate = () => {
 			let progress = -100; // Анимация с помощью изменние свойства translateX от -100% до 100%
+
 			const step = () => {
 				menu.style.transform = 'translateX(' + progress + '%)';
 				progress += 2.7;
@@ -73,7 +74,9 @@ window.addEventListener('DOMContentLoaded', () => {
 					menuBtn.style.display = 'none';
 				}
 			};
-			if (menu.classList.contains('active-menu')) { menu.classList.remove('active-menu'); }
+			if (menu.classList.contains('active-menu')) {
+				menu.classList.remove('active-menu');
+			}
 			requestAnimationFrame(step);
 		};
 
@@ -115,7 +118,7 @@ window.addEventListener('DOMContentLoaded', () => {
 			}
 		};
 
-		document.addEventListener('click', event => {
+		document.querySelector('html').addEventListener('click', event => {
 			const target = event.target;
 			if (target.classList.contains('close-btn')) {
 				handlerToggle();
@@ -333,7 +336,48 @@ window.addEventListener('DOMContentLoaded', () => {
 		});
 	}; //end calcValidation
 
+	const calc = (price = 100) => {
+		const calcBlock = document.querySelector('.calc-block'),
+			calcType = document.querySelector('.calc-type'),
+			calcSquare = document.querySelector('.calc-square'),
+			calcCount = document.querySelector('.calc-count'),
+			calcDay = document.querySelector('.calc-day'),
+			totalValue = document.getElementById('total');
+
+		const countSum = () => {
+			let total = 0,
+				countValue = 1,
+				dayValue = 1;
+			const typeValue = +calcType.value,
+				squareValue = +calcSquare.value;
+
+			if (calcCount.value > 1) {
+				countValue += (calcCount.value - 1) / 10;
+			}
+
+			if (calcDay.value && calcDay.value < 5) {
+				dayValue *= 2;
+			} else if (calcDay.value && calcDay.value < 10) {
+				dayValue *= 1.5;
+			}
+
+			if (typeValue && squareValue) {
+				total = Math.ceil(price * typeValue * squareValue * countValue * dayValue);
+			}
+
+			totalValue.textContent = total;
+		};
+
+		calcBlock.addEventListener('change', e => {
+
+			if (e.target.matches('select') || e.target.matches('input')) {
+				countSum();
+			} // end if
+		}); // calcBlock click
+	};
+
 	calcValidation();
+	calc(100);
 
 	//!SECTION calculator
 
