@@ -1,6 +1,6 @@
 window.addEventListener('DOMContentLoaded', () => {
 	'use strict';
-	// SECTION Libruary
+	//SECTION Libruary
 
 	const addElem = (strClass, strSelectorAppend, strTag) => {
 		const elem = document.createElement(strTag),
@@ -10,9 +10,9 @@ window.addEventListener('DOMContentLoaded', () => {
 		return elem;
 	};
 
-	// !SECTION
+	//!SECTION
 
-	// SECTION Timer
+	//SECTION Timer
 
 	const countTimer = (
 		deadline = '1 january 2021', hoursSelector = '#timer-hours',
@@ -22,7 +22,7 @@ window.addEventListener('DOMContentLoaded', () => {
 			timerMinutes = document.querySelector(minSelector),
 			timerSeconds = document.querySelector(secSelector);
 
-		const getTimeRemainig = ()	=> {
+		const getTimeRemaining = ()	=> {
 			const dateStop = new Date(deadline).getTime(),
 				dateNow = new Date().getTime(),
 				timeToStop = (dateStop - dateNow) / 1000,
@@ -33,7 +33,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		};
 
 		const updateTimer = () => {
-			const timer = getTimeRemainig();
+			const timer = getTimeRemaining();
 			timerHours.textContent = timer.hours < 10 ? `0${timer.hours}` : timer.hours;
 			timerMinutes.textContent = timer.minutes < 10 ? `0${timer.minutes}` : timer.minutes;
 			timerSeconds.textContent = timer.seconds < 10 ? `0${timer.seconds}` : timer.seconds;
@@ -52,9 +52,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	countTimer();
 
-	// !SECTION
+	//!SECTION
 
-	// SECTION Menu
+	//SECTION Menu
 
 	const toggleMenu = () => {
 		const menuBtn = document.querySelector('.menu'),
@@ -145,9 +145,9 @@ window.addEventListener('DOMContentLoaded', () => {
 	toggleMenu();
 
 
-	// !SECTION
+	//!SECTION
 
-	// SECTION Popup
+	//SECTION Popup
 	const showPopUp = () => {
 		const popUp = document.querySelector('.popup'),
 			popUpBtnAll = document.querySelectorAll('.popup-btn');
@@ -306,15 +306,12 @@ window.addEventListener('DOMContentLoaded', () => {
 		let targetSrc;
 
 		commandContent.addEventListener('mouseover', e => {
-			console.log(e.target);
 			if (e.target.matches('.command__photo')) {
 				targetSrc = e.target.src;
 				e.target.src = e.target.dataset.img;
 			}
 		});
-
 		commandContent.addEventListener('mouseout', e => {
-			console.log(e.target);
 			if (e.target.matches('.command__photo')) {
 				e.target.src = targetSrc;
 			}
@@ -404,5 +401,69 @@ window.addEventListener('DOMContentLoaded', () => {
 	calc(100);
 
 	//!SECTION calculator
+
+	//SECTION send-ajax-form
+
+	const sendForm = formID => {
+		const errorMsg = `Что-то пошло не так...`,
+			loadMsg = `Загрузка...`,
+			successMsg = `Спасибо! Мы скоро с Вами свяжемся`,
+			form = document.getElementById(formID),
+			statusMsg = document.createElement('h3');
+
+		const postData = body => {
+			const request = new XMLHttpRequest();
+			request.addEventListener('readystatechange', () => {
+				statusMsg.textContent = loadMsg;
+				if (request.readyState !== 4) {	return;	}
+				if (request.status === 200) {
+					statusMsg.textContent = successMsg;
+				} else { statusMsg.textContent = errorMsg; }
+			}); // request readystatechange
+
+			request.open('POST', './server.php');
+			request.setRequestHeader('Content-Type', 'application/json');
+			request.send(JSON.stringify(body));
+		};
+
+		statusMsg.style.cssText = `font-size: 2rem;`;
+
+		form.addEventListener('input', e => {
+			const tgrt = e.target;
+
+			if (tgrt.matches('input[name=user_name]') || tgrt.matches('input[name=user_message]')) {
+				tgrt.value = tgrt.value.replace(/[^аА-яёЯЁ ]/, '');
+			}
+
+			if (tgrt.matches('input[name=user_phone]')) {
+				tgrt.value = tgrt.value.replace(/^\+{2,}[^\d]/, '');
+			}
+
+			if (tgrt.matches('input[name=user_email]')) {
+				tgrt.value = tgrt.value.replace(/[^a-z-0-9@.]/i, '');
+			}
+		}); // end form listener input
+
+		form.addEventListener('submit', e => {
+			e.preventDefault();
+
+			const formData = new FormData(form),
+				body = {};
+
+			form.appendChild(statusMsg);
+			formData.forEach((val, key) => {
+				console.log(val);
+				body[key] = val;
+			});
+			postData(body);
+			form.reset();
+		});
+	};
+
+	sendForm('form1');
+	sendForm('form2');
+	sendForm('form3');
+
+	//!SECTION send-ajax-form
 
 }); //end window DOMLoaded
