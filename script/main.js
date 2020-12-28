@@ -411,20 +411,22 @@ window.addEventListener('DOMContentLoaded', () => {
 			form = document.getElementById(formID),
 			statusMsg = document.createElement('h3');
 
-		const postData = body => {
+		const postData = body => new Promise((resolve, reject) => {
 			const request = new XMLHttpRequest();
 			request.addEventListener('readystatechange', () => {
 				statusMsg.textContent = loadMsg;
 				if (request.readyState !== 4) {	return;	}
 				if (request.status === 200) {
-					statusMsg.textContent = successMsg;
-				} else { statusMsg.textContent = errorMsg; }
+					resolve(); //statusMsg.textContent = successMsg;
+				} else {
+					reject(); //statusMsg.textContent = errorMsg;
+				}
 			}); // request readystatechange
 
 			request.open('POST', './server.php');
 			request.setRequestHeader('Content-Type', 'application/json');
 			request.send(JSON.stringify(body));
-		};
+		});
 
 		statusMsg.style.cssText = `font-size: 2rem;`;
 
@@ -455,8 +457,10 @@ window.addEventListener('DOMContentLoaded', () => {
 				console.log(val);
 				body[key] = val;
 			});
-			postData(body);
-			form.reset();
+			postData(body)
+				.then(() => statusMsg.textContent = successMsg)
+				.catch(() => statusMsg.textContent = errorMsg)
+				.finally(form.reset());
 		});
 	};
 
