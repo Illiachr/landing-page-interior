@@ -417,9 +417,9 @@ window.addEventListener('DOMContentLoaded', () => {
 				statusMsg.textContent = loadMsg;
 				if (request.readyState !== 4) {	return;	}
 				if (request.status === 200) {
-					resolve(); //statusMsg.textContent = successMsg;
+					resolve();
 				} else {
-					reject(); //statusMsg.textContent = errorMsg;
+					reject();
 				}
 			}); // request readystatechange
 
