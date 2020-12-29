@@ -411,7 +411,7 @@ window.addEventListener('DOMContentLoaded', () => {
 			form = document.getElementById(formID),
 			statusMsg = document.createElement('h3');
 
-		const postData = body => new Promise((resolve, reject) => {
+		const postData = data => new Promise((resolve, reject) => {
 			const request = new XMLHttpRequest();
 			request.addEventListener('readystatechange', () => {
 				statusMsg.textContent = loadMsg;
@@ -425,24 +425,24 @@ window.addEventListener('DOMContentLoaded', () => {
 
 			request.open('POST', './server.php');
 			request.setRequestHeader('Content-Type', 'application/json');
-			request.send(JSON.stringify(body));
+			request.send(JSON.stringify(data));
 		});
 
 		statusMsg.style.cssText = `font-size: 2rem;`;
 
 		form.addEventListener('input', e => {
-			const tgrt = e.target;
+			const trg = e.target;
 
-			if (tgrt.matches('input[name=user_name]') || tgrt.matches('input[name=user_message]')) {
-				tgrt.value = tgrt.value.replace(/[^аА-яёЯЁ ]/, '');
+			if (trg.matches('input[name=user_name]') || trg.matches('input[name=user_message]')) {
+				trg.value = trg.value.replace(/[^аА-яёЯЁ ]/, '');
 			}
 
-			if (tgrt.matches('input[name=user_phone]')) {
-				tgrt.value = tgrt.value.replace(/^\+{2,}[^\d]/, '');
+			if (trg.matches('input[name=user_phone]')) {
+				trg.value = trg.value.replace(/^\+{2,}[^\d]/, '');
 			}
 
-			if (tgrt.matches('input[name=user_email]')) {
-				tgrt.value = tgrt.value.replace(/[^a-z-0-9@.]/i, '');
+			if (trg.matches('input[name=user_email]')) {
+				trg.value = trg.value.replace(/[^a-z-0-9@.]/i, '');
 			}
 		}); // end form listener input
 
