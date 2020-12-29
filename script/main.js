@@ -411,22 +411,14 @@ window.addEventListener('DOMContentLoaded', () => {
 			form = document.getElementById(formID),
 			statusMsg = document.createElement('h3');
 
-		const postData = data => new Promise((resolve, reject) => {
-			const request = new XMLHttpRequest();
-			request.addEventListener('readystatechange', () => {
-				statusMsg.textContent = loadMsg;
-				if (request.readyState !== 4) {	return;	}
-				if (request.status === 200) {
-					resolve();
-				} else {
-					reject();
-				}
-			}); // request readystatechange
-
-			request.open('POST', './server.php');
-			request.setRequestHeader('Content-Type', 'application/json');
-			request.send(JSON.stringify(data));
-		});
+		const postData = data =>
+			fetch('./server.php', {
+				'method': 'POST',
+				'headers': {
+					'Content-Type': 'application/json'
+				},
+				'body': JSON.stringify(data)
+			}); // end postData
 
 		statusMsg.style.cssText = `font-size: 2rem;`;
 
@@ -453,13 +445,18 @@ window.addEventListener('DOMContentLoaded', () => {
 				body = {};
 
 			form.appendChild(statusMsg);
-			formData.forEach((val, key) => {
-				console.log(val);
-				body[key] = val;
-			});
+			formData.forEach((val, key) => body[key] = val);
+			statusMsg.textContent = loadMsg;
+
 			postData(body)
-				.then(() => statusMsg.textContent = successMsg)
-				.catch(() => statusMsg.textContent = errorMsg)
+				.then(response => {
+					if (response.status !== 200) { throw new Error('status network not 200');  }
+					statusMsg.textContent = successMsg;
+				})
+				.catch(error => {
+					statusMsg.textContent = errorMsg;
+					console.error(error);
+				})
 				.finally(form.reset());
 		});
 	};
