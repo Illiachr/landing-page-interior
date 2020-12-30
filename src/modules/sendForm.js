@@ -3,7 +3,8 @@ export const sendForm = formID => {
 		loadMsg = `Загрузка...`,
 		successMsg = `Спасибо! Мы скоро с Вами свяжемся`,
 		form = document.getElementById(formID),
-		statusMsg = document.createElement('h3');
+		statusMsg = document.createElement('h3'),
+		loader = document.createElement('div');
 
 	const postData = data =>
 		fetch('./server.php', {
@@ -14,7 +15,8 @@ export const sendForm = formID => {
 			'body': JSON.stringify(data)
 		}); // end postData
 
-	statusMsg.style.cssText = `font-size: 2rem;`;
+	loader.classList.add('loader');
+	statusMsg.classList.add('status-msg');
 
 	form.addEventListener('input', e => {
 		const trg = e.target;
@@ -34,24 +36,31 @@ export const sendForm = formID => {
 
 	form.addEventListener('submit', e => {
 		e.preventDefault();
-		console.log(e.target);
 		const formData = new FormData(form),
 			body = {};
-		console.log(body);
+
+		form.appendChild(loader);
 		form.appendChild(statusMsg);
+		loader.classList.add('active');
 		formData.forEach((val, key) => body[key] = val);
-		statusMsg.textContent = loadMsg;
-		//statusMsg.style.cssText = loaderStyle;
 
 		postData(body)
 			.then(response => {
+				loader.classList.remove('active');
 				if (response.status !== 200) { throw new Error('status network not 200');  }
+				statusMsg.classList.add('active');
 				statusMsg.textContent = successMsg;
 			})
 			.catch(error => {
+				statusMsg.classList.add('active');
 				statusMsg.textContent = errorMsg;
 				console.error(error);
 			})
-			.finally(form.reset());
+			.finally(() => {
+				form.reset();
+				setTimeout(() => {
+					statusMsg.classList.remove('active');
+				}, 2000);
+			});
 	});
 };
