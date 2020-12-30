@@ -1,0 +1,34 @@
+{
+  "name": "3dglo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch": "webpack --watch",
+    "build": "webpack --config webpack.prod.config.js",
+    "dev": "webpack --config webpack.dev.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Illiachr/3D-constructor.git"
+  },
+  "keywords": [
+    "landing",
+    "page",
+    "js"
+  ],
+  "author": "ic",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Illiachr/3D-constructor/issues"
+  },
+  "homepage": "https://github.com/Illiachr/3D-constructor#readme",
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "@webpack-cli/init": "^1.1.0",
+    "babel-loader": "^8.2.2",
+    "webpack": "^5.11.1",
+    "webpack-cli": "^4.3.0"
+  }
+}
