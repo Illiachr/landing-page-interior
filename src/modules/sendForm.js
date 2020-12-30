@@ -24,7 +24,7 @@ export const sendForm = formID => {
 		}
 
 		if (trg.matches('input[name=user_phone]')) {
-			trg.value = trg.value.replace(/^\+{2,}[^\d]/, '');
+			trg.value = trg.value.replace(/[^+\d]/, '');
 		}
 
 		if (trg.matches('input[name=user_email]')) {
@@ -34,13 +34,14 @@ export const sendForm = formID => {
 
 	form.addEventListener('submit', e => {
 		e.preventDefault();
-
+		console.log(e.target);
 		const formData = new FormData(form),
 			body = {};
-
+		console.log(body);
 		form.appendChild(statusMsg);
 		formData.forEach((val, key) => body[key] = val);
 		statusMsg.textContent = loadMsg;
+		//statusMsg.style.cssText = loaderStyle;
 
 		postData(body)
 			.then(response => {

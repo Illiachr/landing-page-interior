@@ -6,11 +6,12 @@ export const toggleMenu = () => {
 		let progress = -100; // Анимация с помощью изменние свойства translateX от -100% до 100%
 
 		const step = () => {
-			menu.style.transform = 'translateX(' + progress + '%)';
-			progress += 2.7;
+			menu.style.transform = `translateX(${progress}%)`;
+			progress += 1.5;
 			if (progress < 100) {
 				requestAnimationFrame(step);
 			} else {
+				menu.style.transform = 'translateX(100%)';
 				menu.classList.add('active-menu');
 				menu.style.transform = '';
 				menuBtn.style.display = 'none';
@@ -28,37 +29,6 @@ export const toggleMenu = () => {
 			menuBtn.style.display = 'block';
 		} else { menuBtn.style.display = 'none'; }
 	};
-	let id = 0;
-	const smoothScroll = (elem, duration) => {
-		const target = document.querySelector(`#${elem.href.split('#')[1]}`),
-			targetPosition = target.getBoundingClientRect().top,
-			startPosition = window.pageYOffset,
-			distance = targetPosition - startPosition,
-			// eslint-disable-next-line no-unused-vars
-			currentTime = Date.now();
-		let startTime = null;
-		const ease = (t, b, c, d) => {
-			t /= d / 2;
-			if (t < 1) { return c / 2 * t * t + b; }
-			t--;
-			return -c / 2 * (t * (t - 2) - 1) + b;
-		};
-
-		const animation = currentTime => {
-			if (startTime === null) { startTime = currentTime; }
-			const timeElapsed = currentTime - startTime,
-				run = ease(timeElapsed, startPosition, distance, duration);
-			scrollTo(0, run);
-
-			if (timeElapsed < duration) {
-				id = requestAnimationFrame(animation);
-			} else { cancelAnimationFrame(id); }
-		};
-
-		if (window.pageYOffset === 0) {
-			id = requestAnimationFrame(animation);
-		}
-	};
 
 	document.querySelector('html').addEventListener('click', event => {
 		const target = event.target;
@@ -75,11 +45,22 @@ export const toggleMenu = () => {
 				handlerAnimate();
 			} else { handlerToggle(); }
 		}
-		//TODO сделать плавный скролл по кнопке
-		if (target.closest('main a')) {
-			document.querySelector('.service').
-				scrollIntoView({ block: "center", behavior: "auto" });
+
+		if (target.closest('main a[href="#service-block"]')) {
+			event.preventDefault();
+			const id = target.closest('main a[href="#service-block"]').getAttribute('href');
+			document.querySelector(id).scrollIntoView({
+				behavior: "smooth",
+				block: "center"
+			});
 		}
-		if (target.closest('menu li')) { smoothScroll(target.closest('menu li a'), 2000); }
+		if (target.closest('menu li')) {
+			event.preventDefault();
+			const id = target.closest('menu li a').getAttribute('href');
+			document.querySelector(id).scrollIntoView({
+				behavior: "smooth",
+				block: "center"
+			});
+		}
 	});
 };

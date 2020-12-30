@@ -1,6 +1,12 @@
 const path = require('path');
 module.exports = {
 	mode: 'development',
+	devServer: {
+		open: true,
+		port: 8080,
+		hot: true,
+		writeToDisk: true
+	},
 	entry: './src/index.js',
 	output: {
 		filename: 'dev-bundle.js',
