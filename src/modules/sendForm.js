@@ -1,6 +1,5 @@
 export const sendForm = formID => {
 	const errorMsg = `Что-то пошло не так...`,
-		loadMsg = `Загрузка...`,
 		successMsg = `Спасибо! Мы скоро с Вами свяжемся`,
 		form = document.getElementById(formID),
 		statusMsg = document.createElement('h3'),
