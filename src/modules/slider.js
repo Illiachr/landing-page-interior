@@ -1,3 +1,5 @@
+import { addElem } from './suppFunc';
+
 export const slider = () => {
 
 	const addDots = (sliderSelector, sliderItemSelector, dotClass, dotListClass, dotElem = 'li') => {

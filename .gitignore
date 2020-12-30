@@ -1,4 +1,6 @@
 .eslintrc
 .vscode
-.css/style.css
 .idea
+/node_modules
+package-lock.json
+package.json

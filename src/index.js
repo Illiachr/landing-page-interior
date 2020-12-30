@@ -1,0 +1,20 @@
+import { countTimer } from './modules/timer';
+import { toggleMenu } from './modules/tglMenu';
+import { showPopUp } from './modules/popUp';
+import { toggleTab } from './modules/tabNav';
+import { slider } from './modules/slider';
+import { commandToggle } from './modules/tglImg';
+import { calcValidation, calc } from './modules/calculator';
+import { sendForm } from './modules/sendForm';
+
+countTimer();
+toggleMenu();
+showPopUp();
+toggleTab();
+slider();
+commandToggle();
+calcValidation();
+calc(100);
+sendForm('form1');
+sendForm('form2');
+sendForm('form3');
