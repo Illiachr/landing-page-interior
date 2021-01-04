@@ -19,8 +19,8 @@ export const sendForm = formID => {
 
 	form.addEventListener('input', e => {
 		const trg = e.target;
-
-		if (trg.matches('input[name=user_name]') || trg.matches('input[name=user_message]')) {
+		form.elements['user_email'].setCustomValidity('Заполните, пожалуйста это поле!');
+		if (trg.matches('input[name=user_name]')) {
 			trg.value = trg.value.replace(/[^аА-яёЯЁ ]/, '');
 		}
 
@@ -30,14 +30,20 @@ export const sendForm = formID => {
 
 		if (trg.matches('input[name=user_email]')) {
 			trg.value = trg.value.replace(/[^a-z-0-9@.]/i, '');
+			trg.setCustomValidity('');
+		}
+
+		if (trg.matches('input[name=user_message]')) {
+			trg.value = trg.value.replace(/a-z-0-9/i, '');
 		}
 	}); // end form listener input
 
 	form.addEventListener('submit', e => {
 		e.preventDefault();
+		if (form.elements['user_email'].value === '') {	return; }
 		const formData = new FormData(form),
 			body = {};
-
+		form.elements['user_email'].setCustomValidity('');
 		form.appendChild(loader);
 		form.appendChild(statusMsg);
 		loader.classList.add('active');
@@ -61,5 +67,6 @@ export const sendForm = formID => {
 					statusMsg.classList.remove('active');
 				}, 2000);
 			});
+
 	});
 };
