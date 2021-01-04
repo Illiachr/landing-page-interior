@@ -1,28 +1,7 @@
 export const toggleMenu = () => {
 	const menuBtn = document.querySelector('.menu'),
 		menu = document.querySelector('menu');
-
-	const handlerAnimate = () => {
-		let progress = -100; // Анимация с помощью изменние свойства translateX от -100% до 100%
-
-		const step = () => {
-			menu.style.transform = `translateX(${progress}%)`;
-			progress += 1.5;
-			if (progress < 100) {
-				requestAnimationFrame(step);
-			} else {
-				menu.style.transform = 'translateX(100%)';
-				menu.classList.add('active-menu');
-				menu.style.transform = '';
-				menuBtn.style.display = 'none';
-			}
-		};
-		if (menu.classList.contains('active-menu')) {
-			menu.classList.remove('active-menu');
-		}
-		requestAnimationFrame(step);
-	};
-
+		
 	const handlerToggle = () => {
 		menu.classList.toggle('active-menu');
 		if (!menu.classList.contains('active-menu')) {
@@ -41,9 +20,7 @@ export const toggleMenu = () => {
 		}
 
 		if (target.closest('.menu')) {
-			if (screen.width > 768) {
-				handlerAnimate();
-			} else { handlerToggle(); }
+			handlerToggle();
 		}
 
 		if (target.closest('main a[href="#service-block"]')) {

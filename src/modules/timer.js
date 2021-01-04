@@ -1,10 +1,14 @@
 export const countTimer = (
-	deadline = '1 january 2021', hoursSelector = '#timer-hours',
-	minSelector = '#timer-minutes', secSelector = '#timer-seconds'
+	deadline = '7 january 2021', hoursSelector = '#timer-hours',
+	minSelector = '#timer-minutes', secSelector = '#timer-seconds',
+	titleSelector = '.timer-action'
 ) => {
+	const addZero = num => (num < 10 ? `0${num}` : num);
+
 	const timerHours = document.querySelector(hoursSelector),
 		timerMinutes = document.querySelector(minSelector),
-		timerSeconds = document.querySelector(secSelector);
+		timerSeconds = document.querySelector(secSelector),
+		timerTitle = document.querySelector(titleSelector);
 
 	const getTimeRemaining = ()	=> {
 		const dateStop = new Date(deadline).getTime(),
@@ -18,11 +22,12 @@ export const countTimer = (
 
 	const updateTimer = () => {
 		const timer = getTimeRemaining();
-		timerHours.textContent = timer.hours < 10 ? `0${timer.hours}` : timer.hours;
-		timerMinutes.textContent = timer.minutes < 10 ? `0${timer.minutes}` : timer.minutes;
-		timerSeconds.textContent = timer.seconds < 10 ? `0${timer.seconds}` : timer.seconds;
+		timerHours.textContent = addZero(timer.hours);
+		timerMinutes.textContent = addZero(timer.minutes);
+		timerSeconds.textContent = addZero(timer.seconds);
 
 		if (timer.timeToStop < 0) {
+			timerTitle.textContent = 'Акция завершилась';
 			timerHours.textContent = '00';
 			timerMinutes.textContent = '00';
 			timerSeconds.textContent = '00';

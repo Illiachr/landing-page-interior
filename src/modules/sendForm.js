@@ -34,7 +34,7 @@ export const sendForm = formID => {
 		}
 
 		if (trg.matches('input[name=user_message]')) {
-			trg.value = trg.value.replace(/a-z-0-9/i, '');
+			trg.value = trg.value.replace(/[^аА-яёЯЁ .,?!]/i, '');
 		}
 	}); // end form listener input
 
@@ -65,6 +65,7 @@ export const sendForm = formID => {
 				form.reset();
 				setTimeout(() => {
 					statusMsg.classList.remove('active');
+					if (e.target.closest('.popup')) { e.target.closest('.popup').style.display = 'none'; }
 				}, 2000);
 			});
 
