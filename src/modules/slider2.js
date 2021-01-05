@@ -170,6 +170,5 @@ class SliderCarousel {
                 }
             };
         checkResponse();
-        //console.log(maxResponse);
     }
 }
