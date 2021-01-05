@@ -13,7 +13,6 @@
 	<link rel="icon" type="image/png" sizes="16x16" href="./images/favicon/favicon-16x16.png">
 	<link rel="mask-icon" href="./images/favicon/safari-pinned-tab.svg" color="#5bbad5">
 	<script src="dist/bundle.js" defer></script>
-	<script src="src/modules/slider2.js" defer></script>
 	<meta name="msapplication-TileColor" content="#b91d47">
 	<meta name="theme-color" content="#ffffff">
 </head>
@@ -410,6 +409,33 @@
 		</div>
 	</div>
 </div>
+<script src="src/modules/slider2.js"></script>
+<script>
+
+	const caruosel = new SliderCarousel({
+		main: '.companies-wrapper',
+		wrap: '.companies-hor',
+		infinity: true,
+		slidesToShow: 4,
+
+		responsive: [
+			{
+				breakpoint: 1024,
+				slidesToShow: 3
+			},
+			{
+				breakpoint: 768,
+				slidesToShow: 2
+			},
+			{
+				breakpoint: 576,
+				slidesToShow: 1
+			}
+	]
+	});
+	caruosel.init();
+
+</script>
 
 </body>
 </html>
